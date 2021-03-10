@@ -1,4 +1,16 @@
+note over browser:
+user fills the text field
+and clicks on submit
+end note
+
 browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+
+note over server:
+server receives the data (JSON object)
+and sends a URL redirect message
+(status code 302)
+end note
+
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 server-->browser: HTML-code
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
@@ -10,3 +22,6 @@ server-->browser: data.json
 browser->server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
 server-->browser: favicon.ico
 
+note over browser:
+the web page is full rerendered
+end note

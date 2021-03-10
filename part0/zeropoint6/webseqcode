@@ -1,0 +1,15 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+The server responds with a 
+201 created Status
+end note
+
+
+note over browser:
+Upon receiving the status 201
+the browser rerenders the webpage
+with the new note added.
+end note
+
+
