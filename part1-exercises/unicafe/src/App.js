@@ -13,9 +13,11 @@ const Statistics = ({good, bad, neutral}) => {
     let total = good + bad + neutral
     let average = (good*1 + bad*-1 + neutral*0)/total
     let positive = good/total * 100
-    if (!total) total = 0
-    if (!average) average = 0
-    if (!positive) positive = 0
+    if ((!total) && (!average) && (!positive)) return (
+        <>
+            <p> No Stats available yet!!</p>
+        </>
+    )
     return (
         <>
         <p> Total: {total}</p>
@@ -39,6 +41,7 @@ const App = () => {
             <Butt text="Good" onclick={() => updatescore(good, setGood)} score={good}/>
             <Butt text="Neutral" onclick={() => updatescore(neutral, setNeutral)} score={neutral}/>
             <Butt text="Bad" onclick={() => updatescore(bad, setBad)} score={bad}/>
+            <h1> Statistics! </h1>
             <Statistics good={good} bad={bad} neutral={neutral}/>
         </div>
 
