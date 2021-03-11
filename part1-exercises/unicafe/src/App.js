@@ -9,6 +9,22 @@ const Butt = ({text, onclick, score}) => {
     )
 }
 
+const Summary = ({good, bad, neutral}) => {
+    let total = good + bad + neutral
+    let average = (good*1 + bad*-1 + neutral*0)/total
+    let positive = good/total * 100
+    if (!total) total = 0
+    if (!average) average = 0
+    if (!positive) positive = 0
+    return (
+        <>
+        <p> Total: {total}</p>
+        <p> Average: {average}</p>
+        <p> positive Rating: {positive}%</p>
+        </>
+    )
+}
+
 const App = () => {
 
     const [ good, setGood ] = useState(0)
@@ -23,6 +39,7 @@ const App = () => {
             <Butt text="Good" onclick={() => updatescore(good, setGood)} score={good}/>
             <Butt text="Neutral" onclick={() => updatescore(neutral, setNeutral)} score={neutral}/>
             <Butt text="Bad" onclick={() => updatescore(bad, setBad)} score={bad}/>
+            <Summary good={good} bad={bad} neutral={neutral}/>
         </div>
 
     )
