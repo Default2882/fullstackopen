@@ -20,6 +20,8 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
   const len = anecdotes.length
+  const [votes, setVote] = useState(Array(len).fill(0))
+
   const getrandom = (statefunc) => {
     let rand = Math.round(Math.random() * (len - 1))
     console.log("click", rand)
@@ -28,11 +30,23 @@ const App = () => {
 
   console.log(selected, anecdotes[selected])
 
+  const castvote = (index, statefunc) => {
+    let newarr = [...votes]
+    newarr[index] += 1
+    console.log("Casting vote")
+    console.log(votes)
+    console.log(index)
+    console.log(newarr)
+    statefunc(newarr)
+  }
+
   return (
     <div>
-      {anecdotes[selected]}
+      <p>{anecdotes[selected]}</p>
+      <p>Votes: {votes[selected]}</p>
       <div>
           <Button text="Random anecdote" onclick={() => getrandom(setSelected)} />
+          <Button text="Cast Vote" onclick={() => castvote(selected, setVote)} />
       </div>
     </div>
   )
