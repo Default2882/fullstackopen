@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
 
-const Butt = ({text, onclick, score}) => {
+const Buttons = ({text, onclick, score}) => {
     return (
         <>
-            <p>{text}: {score}</p>
             <button onClick={onclick}>{text}</button>
+        </>
+    )
+}
+
+const Statistic = ({text, value}) => {
+    return (
+        <>
+            <p> {text}: {value} </p>
         </>
     )
 }
@@ -20,9 +27,16 @@ const Statistics = ({good, bad, neutral}) => {
     )
     return (
         <>
-        <p> Total: {total}</p>
-        <p> Average: {average}</p>
-        <p> positive Rating: {positive}%</p>
+        <table>
+        <tbody>
+            <tr><td><Statistic text="Good: " value={good} /></td></tr>
+            <tr><td><Statistic text="Neutral: " value={neutral} /></td></tr>
+            <tr><td><Statistic text="Bad: " value={bad} /></td></tr>
+            <tr><td><Statistic text="Total" value={total} /></td></tr>
+            <tr><td><Statistic text="Average" value={average} /></td></tr>
+            <tr><td><Statistic text="positive Rating" value={positive} /></td></tr>
+        </tbody>
+        </table>
         </>
     )
 }
@@ -38,9 +52,9 @@ const App = () => {
     return (
         <div>
             <h1>Give feedback, Please!</h1>
-            <Butt text="Good" onclick={() => updatescore(good, setGood)} score={good}/>
-            <Butt text="Neutral" onclick={() => updatescore(neutral, setNeutral)} score={neutral}/>
-            <Butt text="Bad" onclick={() => updatescore(bad, setBad)} score={bad}/>
+            <Buttons text="Good" onclick={() => updatescore(good, setGood)} score={good}/>
+            <Buttons text="Neutral" onclick={() => updatescore(neutral, setNeutral)} score={neutral}/>
+            <Buttons text="Bad" onclick={() => updatescore(bad, setBad)} score={bad}/>
             <h1> Statistics! </h1>
             <Statistics good={good} bad={bad} neutral={neutral}/>
         </div>
