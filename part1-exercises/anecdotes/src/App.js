@@ -8,6 +8,25 @@ const Button = ({text, onclick}) => {
     )
 }
 
+const checkanecdote = (votes, previndex, statefunc, popanec, anecdotes) => {
+    let mx = -1; // max
+    let maxind = -1;
+    console.log(votes, previndex, popanec)
+    for(let index = 0; index < votes.length; index++){
+        if (mx < votes[index]){
+            mx = votes[index]
+            maxind = index
+        }
+    }
+    if (maxind !== previndex){
+        let newobj = {
+            popanecdote: anecdotes[maxind],
+            previndex: maxind
+        }
+        return newobj
+     }
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often',
@@ -21,33 +40,44 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const len = anecdotes.length
   const [votes, setVote] = useState(Array(len).fill(0))
+  const [previous, setPop] = useState({ 
+      popanecdote : anecdotes[0],
+      previndex : 0
+  })
 
   const getrandom = (statefunc) => {
     let rand = Math.round(Math.random() * (len - 1))
-    console.log("click", rand)
+    //console.log("click", rand)
     statefunc(rand)
   }
 
-  console.log(selected, anecdotes[selected])
+  //console.log(selected, anecdotes[selected])
 
   const castvote = (index, statefunc) => {
     let newarr = [...votes]
     newarr[index] += 1
-    console.log("Casting vote")
-    console.log(votes)
-    console.log(index)
-    console.log(newarr)
+    //console.log("Casting vote")
+    //console.log(votes)
+    //console.log(index)
+    //console.log(newarr)
     statefunc(newarr)
   }
 
+  let objectt = checkanecdote(votes, previous.previndex, setPop, previous.popanecdote, anecdotes)
+
+  if(objectt) setPop(objectt)
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>Votes: {votes[selected]}</p>
-      <div>
+        <h1> Daily anecdote: </h1>
+        <p>{anecdotes[selected]}</p>
+        <p>Votes: {votes[selected]}</p>
+        <div>
           <Button text="Random anecdote" onclick={() => getrandom(setSelected)} />
           <Button text="Cast Vote" onclick={() => castvote(selected, setVote)} />
-      </div>
+        </div>
+        <h1> Most Voted anecdote is: </h1>
+        <p>{previous.popanecdote}</p>
     </div>
   )
 }
