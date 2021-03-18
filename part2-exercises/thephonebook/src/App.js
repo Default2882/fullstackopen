@@ -7,15 +7,20 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
 
   function handlename(event){
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   function handlesubmit(event){
     event.preventDefault()
-    const newobject = {name: newName}
-    setPersons(persons.concat(newobject))
-    setNewName("")
+    const contains = persons.find(person => person.name === newName)
+    console.log("contains??? ", contains)
+    if(!contains){
+        const newobject = {name: newName}
+        setPersons(persons.concat(newobject))
+        setNewName("")
+    }
+    else {window.alert(`The name "${contains.name}"  is already in the phone book`)}
   }
 
   return (
