@@ -1,34 +1,34 @@
 import React from 'react'
+import View from './View'
 
-const Display = ({data}) => {
+const Display = ({data, buttonclick}) => {
     // console.log('filetering and displaying')
     const len = data.length
     if (len > 10) return (
       <>
-        <p>Too many matches!!!??!!?!?!</p>
+        <p>Too many matches!!!??!!?!?! BRUH!!!!!!!!</p>
       </>
     )
     else if(len > 1){
     //   console.log(data)
       return (
         <>
-          <ul>{data.map(element => <li key={element.name}>{element.name}</li>)}</ul>
+            <ul>{
+                    data.map((element,index) => <li key={element.name}>
+                            <p>{element.name}</p>
+                            <View ele={element} hide={true} id={index}/>
+                            <button type="button" onClick={buttonclick} value={index}>Show</button>
+                        </li>
+                    )
+                }
+            </ul>
         </>
       )
     } 
     else if (len === 1){
       const ele = data[0]
       return( 
-        <>
-          <h1>{ele.name}</h1>
-          <p>Capital : {ele.capital}</p>
-          <p>Population : {ele.population}</p>
-          <p>Languages : </p>
-          <ul>{ele.languages.map(lang => <li key={lang.name}>{lang.name}</li>)}</ul>
-          <p>Currencies : </p>
-          <ul>{ele.currencies.map(curr => <li key={curr.name}>{curr.name}</li>)}</ul>
-          <img src={ele.flag} alt="Flag of the selected country"/>
-        </>
+        <View ele={ele}/>
       )
     } 
     else return(<></>)

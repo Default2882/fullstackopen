@@ -14,12 +14,17 @@ const App = () => {
       setDisplay([])
     }
     else{
-      let newarr = mydata.filter(element => element.name.toLowerCase().startsWith(s))
+      let newarr = mydata.filter(element => {
+        let x = element.name.toLowerCase()
+        return x.match(new RegExp(s))
+      })
       setDisplay(newarr)
     }
     setField(event.target.value)
   }
+
   // console.log(todisplay)
+  
   useEffect(() => {
     console.log("fetching the data")
     axios.get('https://restcountries.eu/rest/v2/all').then(response => {
@@ -30,7 +35,14 @@ const App = () => {
   }, [])
 
   // console.log(mydata)
-  
+
+  function buttonclick(event){
+    // console.log(event.target.value)
+    const tounhide = document.getElementById(event.target.value)
+    tounhide.hidden=false
+    // console.log(tounhide)
+  }
+
   return(
     <>
     <div>debug : {textfield}</div>
@@ -38,7 +50,7 @@ const App = () => {
       <form>
         <div>find countries <input onChange={applyfilter}/></div>
       </form>
-      <Display data={todisplay} />
+      <Display data={todisplay} buttonclick={buttonclick}/>
     </div>
     </>
     )
