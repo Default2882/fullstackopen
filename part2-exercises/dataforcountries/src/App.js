@@ -39,7 +39,7 @@ const App = () => {
   function buttonclick(event){
     // console.log(event.target.value)
     const tounhide = document.getElementById(event.target.value)
-    tounhide.hidden=false
+    tounhide.hidden=(!tounhide.hidden)
     // console.log(tounhide)
   }
 
