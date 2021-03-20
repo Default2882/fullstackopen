@@ -28,7 +28,7 @@ const Display = ({data, buttonclick}) => {
     else if (len === 1){
       const ele = data[0]
       return( 
-        <View ele={ele}/>
+        <View ele={ele} />
       )
     } 
     else return(<></>)

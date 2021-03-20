@@ -1,4 +1,5 @@
 import React from 'react'
+import Weather from './Weather'
 
 const View = ({ele, hide, id}) => {
   if (hide)
@@ -14,7 +15,8 @@ const View = ({ele, hide, id}) => {
           <img src={ele.flag} alt="Flag of the selected country"/>
         </div>
     )
-  else 
+  else {
+    // console.log(weather(ele.name))
     return(
       <div>
         <h1>{ele.name}</h1>
@@ -25,8 +27,10 @@ const View = ({ele, hide, id}) => {
         <p>Currencies : </p>
         <ul>{ele.currencies.map(curr => <li key={curr.name}>{curr.name}</li>)}</ul>
         <img src={ele.flag} alt="Flag of the selected country"/>
+        <Weather location={ele.name} />
       </div>
-  )
+    )
+  }
 }
 
 export default View
