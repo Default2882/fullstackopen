@@ -6,7 +6,7 @@ const Display = ({data, buttonclick}) => {
     const len = data.length
     if (len > 10) return (
       <>
-        <p>Too many matches!!!??!!?!?! BRUH!!!!!!!!</p>
+        <p>Too many matches!!!??!!?!?!</p>
       </>
     )
     else if(len > 1){

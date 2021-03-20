@@ -23,6 +23,7 @@ const Weather = ({location}) => {
         return <p>FECTHING DATA PLEASE WAIT!!!!</p>
     }
     else{
+        if(weatherdata === undefined) return(<p>Error in fetching, please check console.</p>)
         return (
             <>
                 <h1>Weather in {location}</h1>
