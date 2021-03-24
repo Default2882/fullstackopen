@@ -19,7 +19,8 @@ const deleteContact = (id) => {
     const response = axios.delete(newbase)
         .then(response => {
             console.log("Succesfully Deleted")
-        }).catch(reason => {
+        })
+        .catch(reason => {
             console.log("Delete failed")
             console.log(reason)
         })

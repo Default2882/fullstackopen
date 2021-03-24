@@ -63,12 +63,15 @@ const App = () => {
 
   function deleteContact(event){
     const id = event.target.id
-    //const id = 69
-    //console.log(id)
-    const name = persons.find(person => person.id.toString() === id).name
-    //console.log(name)
-    const result = window.confirm("Do you want to delete "+name)
-    if (result){
+    // const id = "69"
+    // console.log(id)
+    const todelete = persons.find((person) => person.id.toString() === id)
+    let name;
+    if (todelete) name = todelete.name
+    else return
+    // console.log(name)
+    const result = window.confirm(`Do you want to delete ${name}`)
+    if (result && name){
       phoneService.deleteContact(id)
       .then(phoneService.initialFetch)
       .then(response => {
