@@ -2,24 +2,26 @@ import React, { useState, useEffect } from 'react'
 import Form from './components/Form'
 import Filter from './components/Filter'
 import PhoneBook from './components/PhoneBook'
-import axios from 'axios'
+import phoneService from './services/phone'
 
 const App = () => {
   
   const [persons, setPersons] = useState([])
 
   useEffect(() => {
-    console.log("fetching")
-    axios.get('http://localhost:3001/persons').then(response => {
-      console.log(response.data)
-      setPersons(response.data)
-      setdisplay(response.data)
+    phoneService.initialFetch()
+    .then(response => {
+      //console.log(response)
+      //console.log(response.data)
+      setPersons(response)
+      setdisplay(response)
     })
   }, [])
 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ todisplay, setdisplay ] = useState([...persons])
+
   function handlename(event){
     //console.log(event.target.value)
     setNewName(event.target.value)
@@ -35,22 +37,47 @@ const App = () => {
     //console.log("contains??? ", contains)
     if(!contains){
         const newobject = {name: newName, number: newNumber}
-        setPersons(persons.concat(newobject))
-        setdisplay(persons.concat(newobject))
-        setNewName("")
-        setNewNumber("")
+        phoneService.addContact(newobject)
+        .then(response => {
+          console.log(response)
+          setPersons(persons.concat(newobject))
+          setdisplay(persons.concat(newobject))
+          setNewName("")
+          setNewNumber("")
+        })
+        
     }
     else {window.alert(`The name "${contains.name}"  is already in the phone book`)}
   }
 
   function filterbook(event){
-    console.log(event.target.value)
+    //console.log(event.target.value)
     const s = event.target.value.toLowerCase()
     if (s === "") setdisplay([...persons])
     else{
         const newdisplay = persons.filter(person => person.name.toLowerCase().startsWith(s))
         console.log(newdisplay)
         setdisplay(newdisplay)
+    }
+  }
+
+  function deleteContact(event){
+    const id = event.target.id
+    //const id = 69
+    //console.log(id)
+    const name = persons.find(person => person.id.toString() === id).name
+    //console.log(name)
+    const result = window.confirm("Do you want to delete "+name)
+    if (result){
+      phoneService.deleteContact(id)
+      .then(phoneService.initialFetch)
+      .then(response => {
+        console.log("Reloading")
+        console.log(response)
+        //console.log(response.data)
+        setPersons(response)
+        setdisplay(response)
+      })
     }
   }
 
@@ -64,7 +91,7 @@ const App = () => {
             handlenumber={handlenumber} handlename={handlename}
       />
       <h2>Numbers</h2>
-      <PhoneBook todisplay={todisplay}/>
+      <PhoneBook todisplay={todisplay} deleteContact={deleteContact}/>
     </div>
     </>
   )
