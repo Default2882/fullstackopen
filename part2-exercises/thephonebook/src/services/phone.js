@@ -13,7 +13,7 @@ const initialFetch = () => {
     return response
 }
 
-const deleteContactapi = (id) => {
+const deleteContactapi = (id, status, setNotif, notifDisplay, setStatus, name) => {
     const newbase = baseurl + "/" + id
     console.log("Deleting : ", newbase)
     const response = axios.delete(newbase)
@@ -22,7 +22,10 @@ const deleteContactapi = (id) => {
         })
         .catch(reason => {
             console.log("Delete failed")
-            console.log(reason)
+            // console.log(reason)
+            setNotif(`${name} has already been removed from the database`)
+            setStatus(false)
+            setTimeout(() => {setNotif(null)} , 10000)
         })
     return response
 }

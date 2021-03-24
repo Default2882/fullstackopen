@@ -3,6 +3,8 @@ import Form from './components/Form'
 import Filter from './components/Filter'
 import PhoneBook from './components/PhoneBook'
 import phoneService from './services/phone'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   
@@ -21,6 +23,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ todisplay, setdisplay ] = useState([...persons])
+  const [ notifDisplay, setNotif ] = useState(null)
+  const [ status, setStatus ] = useState(true)
 
   function handlename(event){
     //console.log(event.target.value)
@@ -45,6 +49,9 @@ const App = () => {
           setdisplay(persons.concat(newobject))
           setNewName("")
           setNewNumber("")
+          setNotif(`${response.name} has been added to the phone book!`)
+          setStatus(true)
+          setTimeout(() => {setNotif(null)}, 2000)
         })
     }
     else if (newNumber !== contains.number){
@@ -72,10 +79,17 @@ const App = () => {
             }))
             setNewName("")
             setNewNumber("")
+            setNotif(`${response.name} has been updated`)
+            setStatus(true)
+            setTimeout(() => {setNotif(null)}, 2000)
           })
       }
     }
-    else {window.alert(`The contact with the same name "${newName}" and number "${newNumber}" exists.`)}
+    else {
+      setNotif(`The contact with the same name "${newName}" and number "${newNumber}" exists.`)
+      setStatus(false)
+      setTimeout(() => {setNotif(null)}, 2000)
+    }
   }
 
   function filterbook(event){
@@ -98,7 +112,7 @@ const App = () => {
     else return // if the id does not exist in out array, simply return
     const result = window.confirm(`Do you want to delete ${name}`)
     if (result && name){
-      phoneService.deleteContactapi(id)
+      phoneService.deleteContactapi(id, status, setNotif, notifDisplay, setStatus, name)
       .then(phoneService.initialFetch)
       .then(response => {
         console.log("Reloading")
@@ -113,6 +127,7 @@ const App = () => {
 
   return (
     <>
+    <Notification message={notifDisplay} isok={status}/>
     <div>
       <h2>Filter</h2>
       <Filter filterbook={filterbook}/>
