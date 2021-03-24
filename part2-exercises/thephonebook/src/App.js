@@ -39,15 +39,43 @@ const App = () => {
         const newobject = {name: newName, number: newNumber}
         phoneService.addContact(newobject)
         .then(response => {
-          console.log(response)
+          // console.log(response)
+          newobject.id = response.id
           setPersons(persons.concat(newobject))
           setdisplay(persons.concat(newobject))
           setNewName("")
           setNewNumber("")
         })
-        
     }
-    else {window.alert(`The name "${contains.name}"  is already in the phone book`)}
+    else if (newNumber !== contains.number){
+      const result = window.confirm(`
+                    The name "${contains.name}" is already in the phone book. 
+                    Do you want to update it??
+                    `)
+      if (result){
+          const newobject = {name: newName, number: newNumber, id: contains.id}
+          phoneService.updateContact(contains.id , newobject)
+          .then(response => {
+            setPersons(persons.map((person) => {
+              if (person.name === newName) {
+                  person.number = newNumber
+                  return person
+                }
+              else return person
+            }))
+            setdisplay(persons.map((person) => {
+              if (person.name === newName) {
+                  person.number = newNumber
+                  return person
+                }
+              else return person
+            }))
+            setNewName("")
+            setNewNumber("")
+          })
+      }
+    }
+    else {window.alert(`The contact with the same name "${newName}" and number "${newNumber}" exists.`)}
   }
 
   function filterbook(event){
@@ -56,23 +84,21 @@ const App = () => {
     if (s === "") setdisplay([...persons])
     else{
         const newdisplay = persons.filter(person => person.name.toLowerCase().startsWith(s))
-        console.log(newdisplay)
+        // console.log(newdisplay)
         setdisplay(newdisplay)
     }
   }
 
   function deleteContact(event){
     const id = event.target.id
-    // const id = "69"
-    // console.log(id)
+    // console.log("Before deleting : ", persons)
     const todelete = persons.find((person) => person.id.toString() === id)
     let name;
     if (todelete) name = todelete.name
-    else return
-    // console.log(name)
+    else return // if the id does not exist in out array, simply return
     const result = window.confirm(`Do you want to delete ${name}`)
     if (result && name){
-      phoneService.deleteContact(id)
+      phoneService.deleteContactapi(id)
       .then(phoneService.initialFetch)
       .then(response => {
         console.log("Reloading")
@@ -80,6 +106,7 @@ const App = () => {
         //console.log(response.data)
         setPersons(response)
         setdisplay(response)
+        // console.log("Should be deleted ", persons)
       })
     }
   }

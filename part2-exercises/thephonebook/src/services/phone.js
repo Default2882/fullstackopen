@@ -13,7 +13,7 @@ const initialFetch = () => {
     return response
 }
 
-const deleteContact = (id) => {
+const deleteContactapi = (id) => {
     const newbase = baseurl + "/" + id
     console.log("Deleting : ", newbase)
     const response = axios.delete(newbase)
@@ -37,4 +37,18 @@ const addContact = (newobject) => {
     return response
 }
 
-export default { initialFetch, addContact, deleteContact }
+const updateContact = (id , newobject) => {
+    const newbase = baseurl + "/" + id
+    const response = axios.put(newbase, newobject)
+                    .then(response => {
+                        console.log("Successfully updated")
+                        return response.data
+                    })
+                    .catch(reason => {
+                        console.log("HTTP PUT failed!")
+                        console.log(reason)
+                    })
+    return response
+}
+
+export default { initialFetch, addContact, deleteContactapi,updateContact }
