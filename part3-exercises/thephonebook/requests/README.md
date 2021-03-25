@@ -1,0 +1,1 @@
+These requests are meant to be used with the REST VSCode extension
