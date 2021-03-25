@@ -7,3 +7,28 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "Yadadada!!!!"
+}
+
+###
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "number": "1234567"
+}
+
+###
+POST http://localhost:3001/api/persons HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "WEEEEEEEE!!!!", 
+    "number": "1234567"
+}
+

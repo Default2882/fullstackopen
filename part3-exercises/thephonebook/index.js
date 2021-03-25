@@ -2,6 +2,7 @@ const { response } = require('express')
 const express = require('express')
 
 app = express()
+app.use(express.json())
 
 persons = [
     {
@@ -61,6 +62,43 @@ app.delete('/api/persons/:id', (request, response) => {
     else{
         console.log("Contact not found")
         return response.status(400).end()
+    }
+})
+
+const generateID = () => {
+    if (persons.length === 0) return 0
+    let newId = 1
+    while (persons.find(person => person.id === newId)){
+        newId = Math.floor(Math.random()*Math.floor(2000))
+    }
+    return newId
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    console.log("adding : ", body)
+
+    if (!body.number){
+        return response.status(400).json({
+            error: "Contact number is missing"
+        })
+    }
+    else if(!body.name){
+        return response.status(400).json({
+            error: "Contact name is missing"
+        })
+    }
+    else{
+        const contains = persons.find(person => person.name === body.name)
+        if(contains){
+            return response.status(400).json({
+                error: "The Contact is already in the phonebook"
+            })
+        }
+        const id = generateID()
+        const newContact = {id: id, ...body}
+        persons = persons.concat(newContact)
+        return response.status(200).json(newContact)
     }
 })
 
