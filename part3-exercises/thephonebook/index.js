@@ -33,6 +33,12 @@ app.get('/', (request, response) => {
     response.send("<h1>Hello World from the phonebook app. YeeHaw!!!</h1>")
 })
 
+app.get('/info', (request, response) => {
+    const count = persons.length
+    const date = new Date()
+    response.send(`<h3>The phonebook has info for ${count} people </h3>
+                  <h3>Date is : ${date}</h3>`)
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
