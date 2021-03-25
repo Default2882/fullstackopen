@@ -1,3 +1,4 @@
+const { response } = require('express')
 const express = require('express')
 
 app = express()
@@ -38,6 +39,13 @@ app.get('/info', (request, response) => {
     const date = new Date()
     response.send(`<h3>The phonebook has info for ${count} people </h3>
                   <h3>Date is : ${date}</h3>`)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    const person = persons.find(person => person.id.toString() === id)
+    if(!person) return response.status(404).end()
+    else return response.json(person)
 })
 
 const PORT = 3001
