@@ -1,8 +1,15 @@
-const { response } = require('express')
 const express = require('express')
+const morgan = require('morgan')
 
 app = express()
 app.use(express.json())
+
+
+morgan.token('content', (request , response) => {
+    return JSON.stringify(request.body)
+})
+
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] :content'))
 
 persons = [
     {
@@ -51,16 +58,16 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    console.log("Trying to delete "+id)
+    // console.log("Trying to delete "+id)
     const person = persons.find(person => person.id.toString() === id)
     if (person){
-        console.log("Deleting contact")
-        console.log(person)
+        // console.log("Deleting contact")
+        // console.log(person)
         persons = persons.filter(person => person.id.toString() !== id)
         return response.status(200).end()
     }
     else{
-        console.log("Contact not found")
+        // console.log("Contact not found")
         return response.status(400).end()
     }
 })
@@ -76,7 +83,7 @@ const generateID = () => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    console.log("adding : ", body)
+    // console.log("adding : ", body)
 
     if (!body.number){
         return response.status(400).json({
