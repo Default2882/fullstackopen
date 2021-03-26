@@ -64,7 +64,7 @@ app.delete('/api/persons/:id', (request, response) => {
         // console.log("Deleting contact")
         // console.log(person)
         persons = persons.filter(person => person.id.toString() !== id)
-        return response.status(200).end()
+        return response.status(200).json(person)
     }
     else{
         // console.log("Contact not found")
