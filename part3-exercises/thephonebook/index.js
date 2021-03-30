@@ -1,42 +1,25 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 
+const Person = require('./models/person')
 app = express()
+
 app.use(express.json())
 app.use(cors())
 app.use(express.static('build'))
 morgan.token('content', (request , response) => {
     return JSON.stringify(request.body)
 })
-
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :content'))
 
-persons = [
-    {
-        id: 1,
-        name: "Arto Hellas",
-        number: "040-123456"
-    },
-    {
-        id: 2,
-        name: "Ada Lovelace",
-        number: "040-023568"
-    },
-    {
-        id: 3,
-        name: "Dan Abramov",
-        number: "040-190222"
-    },
-    {
-        id: 4,
-        name: "Marry Poppendick",
-        number: "040-098467"
-    }
-]
-
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({})
+    .then(persons => {
+        // console.log(persons)
+        response.json(persons)
+    })
 })
 
 app.get('/', (request, response) => {
@@ -44,33 +27,29 @@ app.get('/', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-    const count = persons.length
-    const date = new Date()
-    response.send(`<h3>The phonebook has info for ${count} people </h3>
-                  <h3>Date is : ${date}</h3>`)
+    Person.find({})
+    .then(persons => {
+        const count = persons.length
+        const date = new Date()
+        response.send(`<h3>The phonebook has info for ${count} people </h3>
+                    <h3>Date is : ${date}</h3>`)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    const person = persons.find(person => person.id.toString() === id)
-    if(!person) return response.status(404).end()
-    else return response.json(person)
+    Person.findById(id).then(person => {
+        response.json(person)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     // console.log("Trying to delete "+id)
-    const person = persons.find(person => person.id.toString() === id)
-    if (person){
-        // console.log("Deleting contact")
-        // console.log(person)
-        persons = persons.filter(person => person.id.toString() !== id)
-        return response.status(200).json(person)
-    }
-    else{
-        // console.log("Contact not found")
-        return response.status(400).end()
-    }
+    Person.deleteOne({_id: id}).
+    then(result =>{
+        response.json(result)
+    })
 })
 
 const generateID = () => {
@@ -97,16 +76,14 @@ app.post('/api/persons', (request, response) => {
         })
     }
     else{
-        const contains = persons.find(person => person.name === body.name)
-        if(contains){
-            return response.status(400).json({
-                error: "The Contact is already in the phonebook"
-            })
-        }
-        const id = generateID()
-        const newContact = {id: id, ...body}
-        persons = persons.concat(newContact)
-        return response.status(200).json(newContact)
+        const newPerson = Person({...body})
+        newPerson.save()
+        .then(result => {
+            console.log(`Added name: ${body.name}, number: ${body.number} to the database`)
+        })
+        .then(result => {
+            response.json(result)
+        })
     }
 })
 
