@@ -18,6 +18,13 @@ const App = () => {
       setPersons(response)
       setdisplay(response)
     })
+    .catch(reason => {
+      console.log("HTTP GET failed!")
+      console.log(reason)
+      setNotif(reason.response.data)
+      setStatus(false)
+      setTimeout(() => {setNotif(null)}, 2000)
+    })
   }, [])
 
   const [ newName, setNewName ] = useState('')
@@ -43,7 +50,7 @@ const App = () => {
         const newobject = {name: newName, number: newNumber}
         phoneService.addContact(newobject)
         .then(response => {
-          // console.log(response)
+          console.log(response)
           newobject.id = response.id
           setPersons(persons.concat(newobject))
           setdisplay(persons.concat(newobject))
@@ -51,6 +58,11 @@ const App = () => {
           setNewNumber("")
           setNotif(`${response.name} has been added to the phone book!`)
           setStatus(true)
+          setTimeout(() => {setNotif(null)}, 2000)
+        })
+        .catch(err => {
+          setNotif(err.response.data.error)
+          setStatus(false)
           setTimeout(() => {setNotif(null)}, 2000)
         })
     }
@@ -83,6 +95,12 @@ const App = () => {
             setStatus(true)
             setTimeout(() => {setNotif(null)}, 2000)
           })
+          .catch(err => {
+            setNotif(err.response.data.error)
+            setStatus(false)
+            setTimeout(() => {setNotif(null)}, 2000)
+          })
+          
       }
     }
     else {
@@ -122,6 +140,13 @@ const App = () => {
         setdisplay(response)
         // console.log("Should be deleted ", persons)
       })
+      .catch(reason => {
+        console.log("Delete failed")
+        // console.log(reason)
+        setNotif(`${name} has already been removed from the database`)
+        setStatus(false)
+        setTimeout(() => {setNotif(null)} , 10000)
+    })
     }
   }
 

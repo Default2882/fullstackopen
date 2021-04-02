@@ -38,5 +38,13 @@ Content-Type: application/json
 
 {
     "name" : "WEEEEEEEE!!!!", 
-    "number": "1234567"
+    "number": "12345678787"
+}
+
+###
+POST http://localhost:3001/api/persons/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "WEEEEEEEE!!!!"
 }

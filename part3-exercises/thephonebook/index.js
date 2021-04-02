@@ -4,7 +4,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 const Person = require('./models/person')
-const { request } = require('express')
 app = express()
 
 app.use(express.static('build'))
@@ -60,42 +59,28 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 // useless function
-const generateID = () => {
-    if (persons.length === 0) return 0
-    let newId = 1
-    while (persons.find(person => person.id === newId)){
-        newId = Math.floor(Math.random()*Math.floor(2000))
-    }
-    return newId
-}
+// const generateID = () => {
+//     if (persons.length === 0) return 0
+//     let newId = 1
+//     while (persons.find(person => person.id === newId)){
+//         newId = Math.floor(Math.random()*Math.floor(2000))
+//     }
+//     return newId
+// }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
-    // console.log("adding : ", body)
-
-    if (!body.number){
-        return response.status(400).json({
-            error: "Contact number is missing"
-        })
-    }
-    else if(!body.name){
-        return response.status(400).json({
-            error: "Contact name is missing"
-        })
-    }
-    else{
-        const newPerson = Person({...body})
-        newPerson.save()
-        .then(result => {
-            console.log(`Added name: ${body.name}, number: ${body.number} to the database`)
-        })
-        .then(result => {
-            response.json(result)
-        })
-    }
+    const newPerson = Person({...body})
+    newPerson.save()
+    .then(result => {
+        console.log(`Added name: ${body.name}, number: ${body.number} to the database`)
+        // console.log("here", result)
+        response.json(result.toJSON())
+    })
+    .catch(err => next(err))
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
     const body = request.body
     const id = request.params.id
     
@@ -103,10 +88,15 @@ app.put('/api/persons/:id', (request, response) => {
         name: body.name,
         number: body.number
     }
+    console.log(updatedPerson, id)
+    Person.findById(id).then(person => {
+        console.log("found: ",person)
+    })
 
-    Person.findByIdAndUpdate(id, updatedPerson, { new : true})
+    Person.findByIdAndUpdate(id, updatedPerson , { new : true })
     .then(result => {
-        response.json(result)
+        console.log(result)
+        response.json(result.toJSON())
     })
     .catch(err => next(err))
 })
@@ -121,6 +111,7 @@ app.use(unknownEndpoint)
 const errorHandler = (error, request, response, next) => {
     console.error(error.message)
     if (error.name === 'CastError') return response.status(400).send({ error: 'malformatted id' }) 
+    else if(error.name === 'ValidationError') return response.status(400).send({ error: error.message })
     next(error)
 }
 

@@ -1,12 +1,8 @@
 require('dotenv').config()
 const mongoose = require('mongoose')
+var uniqueValidator = require('mongoose-unique-validator');
 
 const uri = process.env.MONGODB_URI 
-
-const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
-})
 
 mongoose.connect(uri, { 
     useNewUrlParser: true, 
@@ -23,6 +19,24 @@ mongoose.connect(uri, {
     console.log(err.message)
 })
 
+
+const personSchema = new mongoose.Schema({
+    name: {
+        type : String,
+        required: true,
+        minlength: 3,
+        unique: true
+    },
+    number: {
+        type : String,
+        required: true,
+        minlength: 8,
+        unique: true
+    }
+})
+
+personSchema.plugin(uniqueValidator)
+
 personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
@@ -31,5 +45,5 @@ personSchema.set('toJSON', {
     }
   })
   
-  module.exports = mongoose.model('Person', personSchema)
+module.exports = mongoose.model('Person', personSchema)
 
