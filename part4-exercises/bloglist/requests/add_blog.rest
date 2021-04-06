@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "title" : "TestBlog2", 
+    "author": "Soumya Saurav2",
+    "url" : "http://www.fakeurl2.com",
+    "likes": 1232 
+}
