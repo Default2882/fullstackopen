@@ -3,12 +3,14 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+require('express-async-errors')
 const blogsRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
-const Blog = require('./models/blog')
 
-const mongoUrl = process.env.MONGODB_URI
+const mongoUrl = process.env.NODE_ENV === 'test'
+	? process.env.TEST_MONGODB_URI
+	: process.env.MONGODB_URI
 
 mongoose.connect(mongoUrl, {
 	useNewUrlParser: true,
