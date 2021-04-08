@@ -49,6 +49,29 @@ const initialblogs = [
 	}
 ]
 
+const initialusers = [
+	{
+		username: 'Default28',
+		password: 'password',
+		name: 'Soumya Saurav'
+	},
+	{
+		username: 'Test1',
+		password: 'password1',
+		name: 'Test One'
+	},
+	{
+		username: 'Test2',
+		password: 'password2',
+		name: 'Test Two'
+	},
+	{
+		username: 'Test3',
+		password: 'password3',
+		name: 'Test Three'
+	},
+]
+
 module.exports = {
-	initialblogs
+	initialblogs, initialusers
 }
