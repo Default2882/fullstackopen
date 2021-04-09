@@ -49,12 +49,9 @@ const initialblogs = [
 	}
 ]
 
+// Token for test1 user, regenerate new toke from login.rest
+
 const initialusers = [
-	{
-		username: 'Default28',
-		password: 'password',
-		name: 'Soumya Saurav'
-	},
 	{
 		username: 'Test1',
 		password: 'password1',

@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/blogs/ HTTP/1.1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3QxIiwiaWQiOiI2MDcwMTk4MmQ5Mzc5NjFjNTM1ODA3MTQiLCJpYXQiOjE2MTc5ODAzODV9._PmOgl2Czm0NP4OBE0Pzo7fOtiBPCuue4MqOqKc44-I
 
 {
-    "title" : "TestBlog3", 
-    "author": "Soumya Saurav3",
-    "url" : "http://www.fakeurl3.com",
-    "likes": 123556 
+    "title" : "T6", 
+    "author": "S6",
+    "url" : "http://www.fakeeee.com",
+    "likes": 152932
 }
