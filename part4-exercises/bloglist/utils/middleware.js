@@ -31,20 +31,24 @@ const errorHandler = (error, request, response, next) => {
 const tokenExtractor = (request, response, next) => {
 	const authorization = request.get('authorization')  
 	// logger.info()
+	logger.info("Extracting token", authorization)
 	if (authorization && authorization.toLowerCase().startsWith('bearer ')) 
 		request.token = authorization.substring(7)
 	else request.token = null
+	logger.info("got token: ", request.token)
 	next()
 }
 
 const userExtractor = (request, response, next) => {
 	const token = request.token
+	logger.info("Decoding token")
 	const decodedToken = jwt.verify(token, process.env.SECRET)
-	// logger.info(decodedToken)
+	logger.info("Token Decoded", decodedToken)
 	if (!token || !decodedToken) request.user = null
 	else {
 		request.user = decodedToken.id.toString()
 	}
+	logger.info("User is: ", request.user)
 	next()
 }
 
