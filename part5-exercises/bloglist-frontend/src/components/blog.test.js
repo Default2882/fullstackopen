@@ -70,12 +70,26 @@ test('Testing the create new form', () => {
 
     const mockaddBlog = jest.fn()
     const component = render(
-        <Blogform addBlog={mockaddBlog}/>
+        <Blogform 
+            setNewauthor={mockaddBlog}
+            setNewtitle={mockaddBlog} 
+            setNewurl={mockaddBlog} 
+            addBlog={mockaddBlog}
+        />
     )
 
-    const input = component.container.querySelector('input')
+    const titleinput = component.container.querySelector('#title')
+    const authorinput = component.container.querySelector('#author')
+    const urlinput = component.container.querySelector('#url')
     const form = component.container.querySelector('form')
-
-
-
+    fireEvent.change(titleinput, {target : {value : blog.title}})
+    fireEvent.change(authorinput, {target : {value : blog.author}})
+    fireEvent.change(urlinput, {target : {value : blog.url}})
+    // console.log(titleinput, authorinput, urlinput, form)
+    // console.log(form)
+    fireEvent.submit(form)
+    expect(mockaddBlog.mock.calls).toHaveLength(4)
+    expect(mockaddBlog.mock.calls[0][0]).toBe(blog.title)
+    expect(mockaddBlog.mock.calls[1][0]).toBe(blog.author)
+    expect(mockaddBlog.mock.calls[2][0]).toBe(blog.url)
 })
